@@ -2,32 +2,24 @@
   <h2><%= title %></h2>
   <div class="form-div">
     <h4>Ready To Fill The Form</h4>
-    <form action="/create-user" method="post">
-      <div>
-        <label for="name">Name:</label>
-        <input type="text" name="name" placeholder="Enter Your Name here" />
-      </div>
+    <form action="/signIn-user" method="post">
       <div>
         <label for="email">Email:</label>
+      </div>
+      <div>
         <input type="email" name="email" placeholder="Enter Your Email here" />
       </div>
       <div>
         <label for="password">Password:</label>
+      </div>
+      <div>
         <input
           type="password"
           name="password"
           placeholder="Enter Your password here"
         />
       </div>
-      <div>
-        <label for="confirm-password">Confirm Password:</label>
-        <input
-          type="password"
-          name="confirm-password"
-          placeholder="Confirm Your password here"
-          required
-        />
-      </div>
+
       <div>
         <button class="submit-form">Submit</button>
       </div>
@@ -35,9 +27,6 @@
   </div>
 
   <div class="signin-div">
-    <p>
-      <strong><a href="/sign-in">Sign In</a> </strong>
-    </p>
     <p>
       <strong><a href="/sing-in-google"> Sign In With Google</a></strong>
     </p>
