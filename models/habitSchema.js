@@ -18,10 +18,13 @@ const habitSchema = new mongoose.Schema({
       },
     },
   ],
-  user: {
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
 });
 
 const Habit = mongoose.model("Habit", habitSchema);
+
+module.exports = Habit;

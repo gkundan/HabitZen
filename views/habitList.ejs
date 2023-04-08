@@ -6,7 +6,8 @@
   </head>
   <body>
     <div class="container">
-      <h1>Habit Zen</h1>
+      <h1>Welcome <%= user.name%>!</h1>
+
       <% if (habits.length === 0) { %>
       <h3>You currently have no habits. Please add a habit to get started!</h3>
       <% } else { %>

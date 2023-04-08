@@ -1,5 +1,9 @@
 const User = require("../models/UserSchema");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const bcrypt = require("bcrypt");
 
+//home views
 exports.home = (req, res) => {
   res.render("Home", {
     title: "Welcome to Habit Zone",
@@ -9,23 +13,32 @@ exports.home = (req, res) => {
 //user sign up
 exports.createUser = async (req, res) => {
   try {
-    //check the password
+    // check the password
     if (req.body.password !== req.body["confirm-password"]) {
       console.log("Password Error!");
       return res.redirect("back");
     }
 
-    //check the email is already in database
+    // check if the email is already in the database
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       console.log("Email is already taken!");
       return res.redirect("back");
     }
 
-    // create new user
-    const newUser = await User.create(req.body);
+    // hash the password before saving the user
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
+    // create new user with hashed password
+    const newUser = await User.create({
+      email: req.body.email,
+      password: hashedPassword,
+      name: req.body.name,
+    });
+
     console.log("User created successfully!");
-    return res.redirect("back");
+    return res.redirect("/sign-in");
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Internal server error" });
@@ -39,28 +52,24 @@ exports.signIn = (req, res) => {
   });
 };
 
-//log in function
-exports.logIn = async (req, res) => {
-  try {
-    // Find the user
-    const user = await User.findOne({ email: req.body.email });
-
-    if (user) {
-      // Handle password
-      if (user.password !== req.body.password) {
-        return res.redirect("back");
-      }
-
-      // Handle session creation
-      res.cookie("user_id", user.id);
-      console.log(user.id);
-      return res.redirect("/HabitList");
-    } else {
-      // Handle user not found
+//user log in
+exports.logIn = function (req, res, next) {
+  passport.authenticate("local", function (err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
       return res.redirect("back");
     }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
-  }
+    req.logIn(user, function (err) {
+      if (err) {
+        return next(err);
+      }
+
+      // Set the user ID in the session
+      req.session.userId = user._id;
+
+      return res.redirect("/habitList");
+    });
+  })(req, res, next);
 };
