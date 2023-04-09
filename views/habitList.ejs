@@ -1,65 +1,52 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= title %></title>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
+    <title>Habit Tracker</title>
   </head>
-  <body>
-    <div class="container">
-      <h1>Welcome <%= user.name%>!</h1>
 
-      <% if (habits.length === 0) { %>
-      <h3>You currently have no habits. Please add a habit to get started!</h3>
-      <% } else { %>
-      <h3>Your Habits:</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Habit</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% habits.forEach((habit) => { %>
-          <tr>
-            <td><%= habit.name %></td>
-            <td><%= habit.status %></td>
-            <td>
-              <form method="POST" action="/habit/<%= habit._id %>/update">
-                <input type="radio" id="done" name="status" value="done" <%=
-                habit.status === 'done' ? 'checked' : '' %>>
-                <label for="done">Done</label><br />
-                <input type="radio" id="not-done" name="status" value="not done"
-                <%= habit.status === 'not done' ? 'checked' : '' %>>
-                <label for="not-done">Not Done</label><br />
-                <input type="radio" id="none" name="status" value="none" <%=
-                habit.status === 'none' ? 'checked' : '' %>>
-                <label for="none">None</label><br />
-                <button type="submit">Save</button>
-              </form>
-            </td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-      <% } %>
-      <h3>Add a Habit:</h3>
-      <form method="POST" action="/habit/create">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required /><br /><br />
-        <label for="type">Type:</label>
-        <select id="type" name="type">
-          <option value="gym">Gym</option>
-          <option value="exercising">Exercising</option>
-          <option value="study">Study</option>
-          <option value="playing">Playing</option>
-          <option value="custom">Custom</option></select
-        ><br /><br />
-        <button type="submit">Add Habit</button>
-      </form>
-      <h3>All Days Report:</h3>
-      <a href="/habit/report">View Report</a>
+  <body>
+    <h1>
+      Habit Tracker <span><strong><%= user.name%></strong></span>
+    </h1>
+    <div class="List-main">
+      <div id="add-habit-form">
+        <h2>Add a New Habit</h2>
+        <form method="POST" action="/habits">
+          <label for="name">Habit Name:</label>
+          <input type="text" id="name" name="name" /><br /><br />
+          <button type="submit">Add Habit</button>
+        </form>
+      </div>
+
+      <div id="habit-list">
+        <h2>My Habits</h2>
+        <% if (habits.length > 0) { %>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% habits.forEach((habit) => { %>
+            <tr>
+              <td>
+                <a href="/habit/<%= habit._id %>"> <%= habit.name %> </a>
+              </td>
+              <td><%= habit.status %></td>
+              <td>
+                <a href="/habit/<%= habit._id %>">View Details</a>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <% } else { %>
+        <p>You have no habits yet.</p>
+        <% } %>
+      </div>
     </div>
   </body>
 </html>

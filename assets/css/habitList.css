@@ -1,0 +1,16 @@
+.List-main {
+  display: flex;
+  text-align: center;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background-color: lightgray;
+  height: 75vh;
+}
+
+h1 {
+  text-align: center;
+}
+h1 span {
+  color: brown;
+}

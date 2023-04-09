@@ -12,7 +12,7 @@ exports.habitList = async (req, res) => {
 
     // Retrieve habits for the logged-in user
     const habits = await Habit.find({ userId: req.session.userId });
-
+    console.log("user_id from the render HabitList", req.user._id);
     return res.render("habitList", {
       title: "Welcome to HabitZen",
       habits: habits,
@@ -26,27 +26,15 @@ exports.habitList = async (req, res) => {
 
 //adding new habit
 exports.newHabit = async (req, res) => {
-  const { name } = req.body;
-  const user_id = req.cookies.user_id;
-  console.log(user_id);
   try {
-    const habit = await Habit.create({
-      name: name,
-      user: user_id, // use user instead of userId
-      status: {
-        Monday: "None",
-        Tuesday: "None",
-        Wednesday: "None",
-        Thursday: "None",
-        Friday: "None",
-        Saturday: "None",
-        Sunday: "None",
-      },
-    });
-    console.log("New habit added: ", habit);
-    res.redirect("/habitList");
-  } catch (err) {
-    console.log("Error in creating habit: ", err);
-    return res.redirect("back");
+    const userId = req.user._id; // get the user ID from the authenticated user
+    const habitData = { ...req.body, userId }; // add the user ID to the habit data
+    const habit = new Habit(habitData);
+    console.log(habit);
+    await habit.save();
+    res.status(201).json({ habit });
+  } catch (error) {
+    console.log("Error in creating habit: ", error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
