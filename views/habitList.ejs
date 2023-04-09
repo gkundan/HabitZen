@@ -1,25 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Habit Tracker</title>
+    <title>Habit List</title>
   </head>
-
   <body>
-    <h1>
-      Habit Tracker <span><strong><%= user.name%></strong></span>
-    </h1>
+    <h1>My Habits</h1>
     <div class="List-main">
-      <div id="add-habit-form">
-        <h2>Add a New Habit</h2>
+      <div>
         <form method="POST" action="/habits">
+          <label for="category">Category:</label>
+          <select id="category" name="category">
+            <option value="gym">Gym</option>
+            <option value="exercise">Exercise</option>
+            <option value="play">Play</option>
+            <option value="swimming">Swimming</option>
+            <option value="study">Study</option>
+            <option value="walking">Walking</option>
+            <option value="custom">Custom</option>
+          </select>
+
+          <div id="custom-category" style="display: none">
+            <label for="custom-category-name">Custom Category Name:</label>
+            <input
+              type="text"
+              id="custom-category-name"
+              name="custom-category-name"
+            />
+          </div>
+
+          <br />
+
           <label for="name">Habit Name:</label>
           <input type="text" id="name" name="name" /><br /><br />
           <button type="submit">Add Habit</button>
         </form>
       </div>
-
-      <div id="habit-list">
-        <h2>My Habits</h2>
+      <div>
         <% if (habits.length > 0) { %>
         <table>
           <thead>
@@ -48,5 +64,17 @@
         <% } %>
       </div>
     </div>
+    <script>
+      const customCategory = document.getElementById("custom-category");
+      const categoryDropdown = document.getElementById("category");
+
+      categoryDropdown.addEventListener("change", () => {
+        if (categoryDropdown.value === "custom") {
+          customCategory.style.display = "block";
+        } else {
+          customCategory.style.display = "none";
+        }
+      });
+    </script>
   </body>
 </html>
