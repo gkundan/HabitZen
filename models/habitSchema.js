@@ -10,6 +10,15 @@ const habitSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  category: {
+    type: String,
+    enum: ["gym", "exercise", "play", "swimming", "study", "walking", "custom"],
+    required: true,
+  },
+  customCategoryName: {
+    type: String,
+    default: "",
+  },
   status: [
     {
       date: {
@@ -20,6 +29,18 @@ const habitSchema = new mongoose.Schema({
         type: String,
         enum: ["Done", "Not Done", "No Action"],
         default: "None",
+      },
+    },
+  ],
+  log: [
+    {
+      action: {
+        type: String,
+        required: true,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
       },
     },
   ],

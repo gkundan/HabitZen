@@ -1,13 +1,21 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/noty@3.1.4/lib/noty.css"
+    />
     <title>Habit List</title>
   </head>
   <body>
+    <% if (messages.success) { %>
+    <div class="alert alert-success"><%= messages.success %></div>
+    <% } %>
+
     <h1>My Habits</h1>
     <div class="List-main">
       <div>
-        <form method="POST" action="/habits">
+        <form method="POST" action="/habit/create">
           <label for="category">Category:</label>
           <select id="category" name="category">
             <option value="gym">Gym</option>
@@ -40,20 +48,37 @@
         <table>
           <thead>
             <tr>
+              <th>Category</th>
               <th>Name</th>
-              <th>Status</th>
-              <th>Action</th>
+             <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <% habits.forEach((habit) => { %>
             <tr>
+              <td><%= habit.category %></td>
               <td>
-                <a href="/habit/<%= habit._id %>"> <%= habit.name %> </a>
+                <td>
+                  <td>
+                    <a href="/habit/<%= habit._id %>/log"> <%= habit.name %> </a>
+                  </td>
+                  
+                </td>
               </td>
-              <td><%= habit.status %></td>
+
               <td>
-                <a href="/habit/<%= habit._id %>">View Details</a>
+                <a
+                  href="/habit/<%= habit._id %>/delete"
+                  class="delete-habit-link"
+                  >Delete</a
+                >
+                <form
+                  class="delete-habit-form"
+                  method="POST"
+                  action="/habit/<%= habit._id %>/delete"
+                >
+                  <input type="hidden" name="_method" value="DELETE" />
+                </form>
               </td>
             </tr>
             <% }) %>
@@ -64,6 +89,26 @@
         <% } %>
       </div>
     </div>
+
+    <% if (messages.success || messages.error) { %>
+    <script src="https://cdn.jsdelivr.net/npm/noty@3.1.4/dist/noty.min.js"></script>
+    <script>
+      const type = '<%= messages.success ? "success" : "error" %>';
+      const text = "<%= messages.success || messages.error %>";
+
+      new Noty({
+        theme: "sunset",
+        type,
+        text,
+        timeout: 5000,
+        animation: {
+          open: "animated fadeIn",
+          close: "animated fadeOut",
+        },
+      }).show();
+    </script>
+    <% } %>
+    <!-- //custum input  -->
     <script>
       const customCategory = document.getElementById("custom-category");
       const categoryDropdown = document.getElementById("category");
@@ -76,5 +121,7 @@
         }
       });
     </script>
+    <!-- //delete script  -->
+    <script src="/assets/js/main.js"></script>
   </body>
 </html>

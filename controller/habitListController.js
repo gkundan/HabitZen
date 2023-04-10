@@ -1,7 +1,8 @@
-//
-
 const Habit = require("../models/habitSchema");
 //
+const flash = require("connect-flash");
+
+// /rendering lists
 
 exports.habitList = async (req, res) => {
   try {
@@ -12,11 +13,15 @@ exports.habitList = async (req, res) => {
 
     // Retrieve habits for the logged-in user
     const habits = await Habit.find({ userId: req.session.userId });
-    console.log("user_id from the render HabitList", req.user._id);
+
+    // Get the flash messages, if any
+    const messages = req.flash("notyMessages");
+
     return res.render("habitList", {
       title: "Welcome to HabitZen",
       habits: habits,
       user: req.user,
+      messages: messages, // pass the messages variable to the view
     });
   } catch (err) {
     console.error(err);
@@ -24,17 +29,84 @@ exports.habitList = async (req, res) => {
   }
 };
 
-//adding new habit
+// handle new creation
 exports.newHabit = async (req, res) => {
   try {
-    const userId = req.user._id; // get the user ID from the authenticated user
-    const habitData = { ...req.body, userId }; // add the user ID to the habit data
+    const userId = req.user._id;
+    const habitData = { ...req.body, userId };
     const habit = new Habit(habitData);
-    console.log(habit);
     await habit.save();
-    res.status(201).json({ habit });
+
+    req.flash("notyMessages", {
+      type: "success",
+      text: "New habit added successfully!",
+    });
+    res.redirect("back");
   } catch (error) {
     console.log("Error in creating habit: ", error);
-    res.status(500).json({ message: "Internal Server Error" });
+    req.flash("notyMessages", {
+      type: "error",
+      text: "Failed to create new habit.",
+    });
+    res.redirect("/habits");
+  }
+};
+
+// Handle habit delete on POST
+
+exports.deleteHabit = async (req, res, next) => {
+  try {
+    const habit = await Habit.findByIdAndDelete(req.params.id);
+
+    if (!habit) {
+      res.status(404).send("Habit not found");
+      return;
+    }
+
+    req.flash("success", "Deleted habit with id " + req.params.id);
+    res.redirect("back");
+  } catch (err) {
+    next(err);
+  }
+};
+
+///log
+exports.habit_log_get = async (req, res, next) => {
+  try {
+    const habit = await Habit.findById(req.params.id);
+    if (!habit) {
+      return res.status(404).send("Habit not found");
+    }
+    res.render("habit_log", { title: "Habit Log", habit });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//log creation
+exports.log_create = async (req, res) => {
+  const habitId = req.params.habitId;
+  const action = req.body.action;
+  const date = req.body.date;
+
+  try {
+    const habit = await Habit.findById(habitId);
+    if (!habit) {
+      res.status(404).send("Habit not found");
+      return;
+    }
+
+    const entry = {
+      action,
+      date: new Date(date),
+    };
+    habit.log.push(entry);
+    const updatedHabit = await habit.save();
+
+    res.status(200).json(updatedHabit.log);
+    res.redirect("back");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating habit");
   }
 };

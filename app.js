@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 const LocalStrategy = require("passport-local").Strategy;
 const passportLocal = require("./config/passportLocal");
 const passport = require("passport");
+const Noty = require("noty");
 
 // Set up body parser
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -52,6 +53,23 @@ app.set("view engine", "ejs");
 
 // Set up routes
 app.use("/", habitRouts);
+
+// Configure Noty.js defaults
+Noty.overrideDefaults({
+  layout: "topRight",
+  timeout: 3000,
+  theme: "bootstrap-v4",
+  progressBar: true,
+  animation: {
+    open: "animated fadeIn",
+    close: "animated fadeOut",
+  },
+});
+// Set up middleware to pass Noty.js notifications to views
+app.use((req, res, next) => {
+  res.locals.notyMessages = req.flash("notyMessages");
+  next();
+});
 
 // Start the server
 app.listen(port, () => {
