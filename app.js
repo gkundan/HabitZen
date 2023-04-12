@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 const session = require("express-session");
 const flash = require("connect-flash");
 const mongoose = require("mongoose");
-const db = require("./config/db");
+const connectDB = require("./config/db");
 const habitRouts = require("./routes/habitRoutes");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -37,13 +37,7 @@ app.use(passport.session());
 passportLocal(passport);
 
 // Connect to MongoDB
-mongoose
-  .connect("mongodb://0.0.0.0:27017/HabitZen", {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => console.log("MongoDB connected :_:"))
-  .catch((err) => console.log(err));
+connectDB();
 
 // Set up flash middleware
 app.use(flash());

@@ -1,5 +1,19 @@
 <div class="main">
-  <h2><%= title %></h2>
+  <div class="welcome-div">
+    <h2>Welcome</h2>
+    <p>
+      Small daily habits lead to big changes over time - Habitzone helps you
+      cultivate those habits.
+    </p>
+    <div class="signin-div">
+      <p>
+        <strong><a href="/sign-in">Sign In</a> </strong>
+      </p>
+      <p>
+        <strong><a href="/sing-in-google"> Sign In With Google</a></strong>
+      </p>
+    </div>
+  </div>
   <div class="form-div">
     <h4>Ready To Fill The Form</h4>
     <form action="/create-user" method="post">
@@ -21,6 +35,7 @@
       </div>
       <div>
         <label for="confirm-password">Confirm Password:</label>
+
         <input
           type="password"
           name="confirm-password"
@@ -32,14 +47,5 @@
         <button class="submit-form">Submit</button>
       </div>
     </form>
-  </div>
-
-  <div class="signin-div">
-    <p>
-      <strong><a href="/sign-in">Sign In</a> </strong>
-    </p>
-    <p>
-      <strong><a href="/sing-in-google"> Sign In With Google</a></strong>
-    </p>
   </div>
 </div>

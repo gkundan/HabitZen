@@ -103,7 +103,6 @@ exports.log_create = async (req, res) => {
     habit.log.push(entry);
     const updatedHabit = await habit.save();
 
-    res.status(200).json(updatedHabit.log);
     res.redirect("back");
   } catch (err) {
     console.error(err);

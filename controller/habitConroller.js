@@ -73,3 +73,8 @@ exports.logIn = function (req, res, next) {
     });
   })(req, res, next);
 };
+
+//google
+exports.googleSignUp = (req, res) => {
+  res.send("Update Incoming!!");
+};

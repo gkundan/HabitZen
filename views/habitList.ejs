@@ -12,7 +12,7 @@
     <div class="alert alert-success"><%= messages.success %></div>
     <% } %>
 
-    <h1>My Habits</h1>
+    <h1><%= title %> <strong> <%=user.name%></strong></h1>
     <div class="List-main">
       <div>
         <form method="POST" action="/habit/create">
@@ -50,7 +50,7 @@
             <tr>
               <th>Category</th>
               <th>Name</th>
-             <th>Action</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -58,14 +58,8 @@
             <tr>
               <td><%= habit.category %></td>
               <td>
-                <td>
-                  <td>
-                    <a href="/habit/<%= habit._id %>/log"> <%= habit.name %> </a>
-                  </td>
-                  
-                </td>
+                <a href="/habit/<%= habit._id %>/log"><%= habit.name %></a>
               </td>
-
               <td>
                 <a
                   href="/habit/<%= habit._id %>/delete"
