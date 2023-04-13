@@ -109,3 +109,33 @@ exports.log_create = async (req, res) => {
     res.status(500).send("Error updating habit");
   }
 };
+
+//log update
+// Update habit log entry
+exports.log_update = async (req, res) => {
+  const habitId = req.params.habitId;
+  const entryId = req.params.entryId;
+  const status = req.body.status;
+
+  try {
+    const habit = await Habit.findById(habitId);
+    if (!habit) {
+      res.status(404).send("Habit not found");
+      return;
+    }
+
+    const entry = habit.log.id(entryId);
+    if (!entry) {
+      res.status(404).send("Log entry not found");
+      return;
+    }
+
+    entry.status = status;
+    const updatedHabit = await habit.save();
+
+    res.redirect("back");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating log entry");
+  }
+};

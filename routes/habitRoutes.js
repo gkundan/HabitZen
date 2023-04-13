@@ -15,7 +15,10 @@ router.post("/create-user", habitController.createUser);
 router.post("/signIn-user", habitController.logIn);
 router.post("/habit/create", habitListController.newHabit);
 router.post("/habit/:habitId/log/create", habitListController.log_create);
-
+router.post(
+  "/habit/:habitId/log/:entryId/update",
+  habitListController.log_update
+);
 //delete
 router.get("/habit/:id/delete", habitListController.deleteHabit);
 

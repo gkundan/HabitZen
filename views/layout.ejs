@@ -19,7 +19,25 @@
     <link rel="stylesheet" type="text/css" href="/css/habitList.css" />
   </head>
   <body>
-    <header></header>
     <main><%- body %></main>
+    <%- include('footer'); -%> <% if (messages.success || messages.error) { %>
+    <script src="https://cdn.jsdelivr.net/npm/noty@3.1.4/dist/noty.min.js"></script>
+    <script>
+      const type = '<%= messages.success ? "success" : "error" %>';
+      const text = "<%= messages.success || messages.error %>";
+
+      new Noty({
+        theme: "sunset",
+        type,
+        text,
+        timeout: 5000,
+        animation: {
+          open: "animated fadeIn",
+          close: "animated fadeOut",
+        },
+      }).show();
+    </script>
+    <% } %>
+    <script src="/js/main.js"></script>
   </body>
 </html>

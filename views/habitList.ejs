@@ -1,48 +1,47 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/noty@3.1.4/lib/noty.css"
-    />
-    <title>Habit List</title>
-  </head>
-  <body>
-    <% if (messages.success) { %>
-    <div class="alert alert-success"><%= messages.success %></div>
-    <% } %>
-
-    <h1><%= title %> <strong> <%=user.name%></strong></h1>
-    <div class="List-main">
-      <div>
+<div class="List-main">
+  <div class="main-container">
+    <div class="List-contaier">
+      <h1><%= title %> <strong> <%=user.name%></strong></h1>
+      <div class="form-div">
         <form method="POST" action="/habit/create">
-          <label for="category">Category:</label>
-          <select id="category" name="category">
-            <option value="gym">Gym</option>
-            <option value="exercise">Exercise</option>
-            <option value="play">Play</option>
-            <option value="swimming">Swimming</option>
-            <option value="study">Study</option>
-            <option value="walking">Walking</option>
-            <option value="custom">Custom</option>
-          </select>
-
-          <div id="custom-category" style="display: none">
-            <label for="custom-category-name">Custom Category Name:</label>
-            <input
-              type="text"
-              id="custom-category-name"
-              name="custom-category-name"
-            />
+          <div>
+            <label for="category">Category:</label>
+          </div>
+          <div>
+            <select id="category" name="category">
+              <option value="gym">Gym</option>
+              <option value="exercise">Exercise</option>
+              <option value="play">Play</option>
+              <option value="swimming">Swimming</option>
+              <option value="study">Study</option>
+              <option value="walking">Walking</option>
+              <option value="custom">Custom</option>
+            </select>
           </div>
 
-          <br />
-
-          <label for="name">Habit Name:</label>
-          <input type="text" id="name" name="name" /><br /><br />
-          <button type="submit">Add Habit</button>
+          <div id="custom-category" style="display: none">
+            <div>
+              <label for="custom-category-name">Custom Category Name:</label>
+            </div>
+            <div>
+              <input
+                type="text"
+                id="custom-category-name"
+                name="custom-category-name"
+              />
+            </div>
+          </div>
+          <div>
+            <label for="name">Habit Description:</label>
+          </div>
+          <div><input type="text" id="name" name="name" /></div>
+          <div class="submit-btn">
+            <button class="submit-form" type="submit">Add Habit</button>
+          </div>
         </form>
       </div>
+    </div>
+    <div class="Log-container">
       <div>
         <% if (habits.length > 0) { %>
         <table>
@@ -83,39 +82,21 @@
         <% } %>
       </div>
     </div>
+  </div>
+</div>
 
-    <% if (messages.success || messages.error) { %>
-    <script src="https://cdn.jsdelivr.net/npm/noty@3.1.4/dist/noty.min.js"></script>
-    <script>
-      const type = '<%= messages.success ? "success" : "error" %>';
-      const text = "<%= messages.success || messages.error %>";
+<!-- //custom input  -->
+<script>
+  const customCategory = document.getElementById("custom-category");
+  const categoryDropdown = document.getElementById("category");
 
-      new Noty({
-        theme: "sunset",
-        type,
-        text,
-        timeout: 5000,
-        animation: {
-          open: "animated fadeIn",
-          close: "animated fadeOut",
-        },
-      }).show();
-    </script>
-    <% } %>
-    <!-- //custum input  -->
-    <script>
-      const customCategory = document.getElementById("custom-category");
-      const categoryDropdown = document.getElementById("category");
-
-      categoryDropdown.addEventListener("change", () => {
-        if (categoryDropdown.value === "custom") {
-          customCategory.style.display = "block";
-        } else {
-          customCategory.style.display = "none";
-        }
-      });
-    </script>
-    <!-- //delete script  -->
-    <script src="/assets/js/main.js"></script>
-  </body>
-</html>
+  categoryDropdown.addEventListener("change", () => {
+    if (categoryDropdown.value === "custom") {
+      customCategory.style.display = "block";
+    } else {
+      customCategory.style.display = "none";
+    }
+  });
+</script>
+<!-- //delete script  -->
+<script src="/assets/js/main.js"></script>

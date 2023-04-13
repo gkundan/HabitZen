@@ -1,33 +1,37 @@
 <div class="main">
-  <div class="form-div">
-    <h2><%= title %></h2>
-    <h4>Fill The Blank <span>Booo</span></h4>
-    <form action="/signIn-user" method="post">
-      <div>
-        <label for="email">Email:</label>
-      </div>
-      <div>
-        <input type="email" name="email" placeholder="Enter Your Email here" />
-      </div>
-      <div>
-        <label for="password">Password:</label>
-      </div>
-      <div>
-        <input
-          type="password"
-          name="password"
-          placeholder="Enter Your password here"
-        />
-      </div>
-
-      <div>
-        <button class="submit-form">Submit</button>
-      </div>
-    </form>
-    <div class="signin-div">
+  <div class="singIN-container">
+    <div class="form-div">
+      <h2><%= title %></h2>
+      <h4>Fill The Blank <span>Booo</span></h4>
       <p>
         <strong><a href="/sing-in-google"> Sign In With Google</a></strong>
       </p>
+      <form action="/signIn-user" method="post">
+        <div>
+          <label for="email">Email:</label>
+        </div>
+        <div>
+          <input
+            type="email"
+            name="email"
+            placeholder="Enter Your Email here"
+          />
+        </div>
+        <div>
+          <label for="password">Password:</label>
+        </div>
+        <div>
+          <input
+            type="password"
+            name="password"
+            placeholder="Enter Your password here"
+          />
+        </div>
+
+        <div class="submit-btn">
+          <button class="submit-form">Submit</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
