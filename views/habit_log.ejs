@@ -1,51 +1,44 @@
-<% if (habit.log && habit.log.length) { %>
-<h2>Habit Log</h2>
-<ul>
-  <% habit.log.forEach(entry => { %>
-  <li>
-    <span><%= entry.date.toLocaleDateString() %></span>
-    <span><%= entry.action %></span>
-    <form
-      method="POST"
-      action="/habit/<%= habit._id %>/log/<%= entry._id %>/update"
-    >
-      <label for="done">Done</label>
-      <input type="radio" id="done" name="action" value="done" <%= entry.action
-      === "done" ? "checked" : "" %>>
-      <label for="notdone">Not Done</label>
-      <input type="radio" id="notdone" name="action" value="notdone" <%=
-      entry.action === "notdone" ? "checked" : "" %>>
-      <label for="noaction">No Action</label>
-      <input type="radio" id="noaction" name="action" value="noaction" <%=
-      entry.action === "noaction" ? "checked" : "" %>>
-      <button type="submit">Update</button>
-    </form>
-  </li>
-  <% }) %>
-</ul>
-<% } else { %>
-<p>No log entries found for this habit.</p>
-<% } %>
+<div class="log_container">
+  <div class="entry-log">
+    <h2>Add Entry</h2>
+    <div class="entry-form">
+      <form method="POST" action="/habit/<%= habit._id %>/log/create">
+        <div>
+          <label for="entry-date">Date:</label>
+        </div>
+        <div>
+          <input type="date" id="entry-date" name="date" required />
+        </div>
+        <div>
+          <label for="entry-action">Action:</label>
+        </div>
+        <div>
+          <select id="entry-action" name="action" required>
+            <option value="done">Done</option>
+            <option value="notdone">Not Done</option>
+            <option value="noaction">No Action</option>
+          </select>
+        </div>
+        <button type="submit">Add Entry</button>
+      </form>
+    </div>
+  </div>
+  <div class="update-log">
+    <% if (habit.log && habit.log.length) { %>
+    <h2>Habit Log</h2>
+    <div class="calendar-container">
+      <div id="calendar"></div>
+    </div>
+    <% } else { %>
+    <p>No log entries found for this habit.</p>
+    <% } %>
+  </div>
+</div>
 
-<h2>Add Entry</h2>
-<form method="POST" action="/habit/<%= habit._id %>/log/create">
-  <label for="entry-date">Date:</label>
-  <input type="date" id="entry-date" name="date" required />
-  <label for="entry-action">Action:</label>
-  <select id="entry-action" name="action" required>
-    <option value="done">Done</option>
-    <option value="notdone">Not Done</option>
-    <option value="noaction">No Action</option>
-  </select>
-  <button type="submit">Add Entry</button>
-</form>
-
-<div id="calendar"></div>
-
-<script src="/assets/js/main.js"></script>
 <script>
   // Initialize calendar with habit log entries
   const entries = <%= JSON.stringify(habit.log) %>;
+  console.log(entries); // check if entries array contains data
   const calendarEl = document.getElementById('calendar');
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
@@ -56,5 +49,3 @@
   });
   calendar.render();
 </script>
-
-<!-- //create log -->

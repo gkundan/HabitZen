@@ -18,7 +18,7 @@ exports.habitList = async (req, res) => {
     const messages = req.flash("notyMessages");
 
     return res.render("habitList", {
-      title: "Welcome to HabitZen",
+      title: "Hi!",
       habits: habits,
       user: req.user,
       messages: messages, // pass the messages variable to the view
@@ -115,7 +115,7 @@ exports.log_create = async (req, res) => {
 exports.log_update = async (req, res) => {
   const habitId = req.params.habitId;
   const entryId = req.params.entryId;
-  const status = req.body.status;
+  const action = req.body.action;
 
   try {
     const habit = await Habit.findById(habitId);
@@ -130,7 +130,7 @@ exports.log_update = async (req, res) => {
       return;
     }
 
-    entry.status = status;
+    entry.action = action;
     const updatedHabit = await habit.save();
 
     res.redirect("back");
