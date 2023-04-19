@@ -4,6 +4,7 @@ const habitController = require("../controller/habitConroller");
 const habitListController = require("../controller/habitListController");
 const { ensureAuthenticated } = require("../config/auth");
 
+/************  Get Routs       ****** */
 // Define the routes for handling habit-view related requests
 router.get("/", function (req, res) {
   habitController.home(req, res);
@@ -20,6 +21,14 @@ router.get("/habitList", ensureAuthenticated, habitListController.habitList);
 router.get("/habit/:id/log", ensureAuthenticated, function (req, res) {
   habitListController.habitLog(req, res);
 });
+
+//delete
+router.get("/habit/:id/delete", function (req, res) {
+  habitListController.deleteHabit(req, res);
+});
+router.get("/logout", habitController.logout);
+
+/************  Post Routs       ****** */
 
 // Define the routes for handling habit-post related requests
 router.post("/create-user", function (req, res) {
@@ -39,10 +48,6 @@ router.post("/habit/:id/log", function (req, res) {
 //
 router.post("/habit/:habitId/log/:entryId/update", function (req, res) {
   habitListController.log_update(req, res);
-});
-//delete
-router.get("/habit/:id/delete", function (req, res) {
-  habitListController.deleteHabit(req, res);
 });
 
 // Export the router for use in the app

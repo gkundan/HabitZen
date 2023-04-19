@@ -77,6 +77,16 @@ exports.logIn = function (req, res, next) {
   })(req, res, next);
 };
 
+exports.logout = (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/sign-in");
+    }
+  });
+};
+
 //google
 exports.googleSignUp = (req, res) => {
   res.send("Update Incoming!!");

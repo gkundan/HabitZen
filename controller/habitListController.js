@@ -92,6 +92,7 @@ exports.habitLog = async (req, res, next) => {
       habit,
       log,
       moment,
+      user: req.user,
     });
   } catch (error) {
     console.error(error);
