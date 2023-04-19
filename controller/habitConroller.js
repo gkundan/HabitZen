@@ -54,12 +54,14 @@ exports.signIn = (req, res) => {
 };
 
 //user log in
+//user log in
 exports.logIn = function (req, res, next) {
   passport.authenticate("local", function (err, user, info) {
     if (err) {
       return next(err);
     }
     if (!user) {
+      console.log("user not found");
       return res.redirect("back");
     }
     req.logIn(user, function (err) {

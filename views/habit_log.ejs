@@ -1,8 +1,8 @@
 <div class="log_container">
   <div class="entry-log">
-    <h2>Add Entry</h2>
+    <h2>Add Entry For <%=title %></h2>
     <div class="entry-form">
-      <form method="POST" action="/habit/<%= habit._id %>/log/create">
+      <form method="POST" action="/habit/<%= habit._id %>/log">
         <div>
           <label for="entry-date">Date:</label>
         </div>
@@ -14,9 +14,9 @@
         </div>
         <div>
           <select id="entry-action" name="action" required>
-            <option value="done">Done</option>
-            <option value="notdone">Not Done</option>
-            <option value="noaction">No Action</option>
+            <option value="Done">Done</option>
+            <option value="Not Done">Not Done</option>
+            <option value="No Action">No Action</option>
           </select>
         </div>
         <button type="submit">Add Entry</button>
@@ -24,8 +24,8 @@
     </div>
   </div>
   <div class="update-log">
-    <% if (habit.log && habit.log.length) { %>
     <h2>Habit Log</h2>
+    <% if (log && log.length) { %>
     <div class="calendar-container">
       <div id="calendar"></div>
     </div>
@@ -35,17 +35,40 @@
   </div>
 </div>
 
+<!-- Load FullCalendar library -->
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.5/index.global.min.js"
+  integrity="sha512-msf87GoBgo6wsVj7CMhInBkfANiREgSpEi70QxdhSy76PDU2b3I5PrapLDmRHVV/ycCoQATfgGeO/JbGgS7dUA=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
-  // Initialize calendar with habit log entries
-  const entries = <%= JSON.stringify(habit.log) %>;
-  console.log(entries); // check if entries array contains data
-  const calendarEl = document.getElementById('calendar');
+  // Get habit log entries
+  const logEntries = JSON.parse(`<%- JSON.stringify(log) %>`);
+  console.log("from habit log", logEntries);
+
+  // Get start and end dates of current week
+  const startOfWeek = moment().startOf("week").format("YYYY-MM-DD");
+  const endOfWeek = moment().endOf("week").format("YYYY-MM-DD");
+
+  // Create calendar with habit log entries for current week
+  const calendarEl = document.getElementById("calendar");
+  console.log(calendarEl); // Check if calendarEl is pointing to the correct element
   const calendar = new FullCalendar.Calendar(calendarEl, {
-    initialView: 'dayGridMonth',
-    events: entries.map(entry => ({
-      title: entry.action === "done" ? "✓" : (entry.action === "notdone" ? "X" : "-"),
-      date: entry.date
-    }))
+    initialView: "listWeek",
+    visibleRange: {
+      start: startOfWeek,
+      end: endOfWeek,
+    },
+    events: logEntries.map((entry) => ({
+      title: entry.title,
+      start: moment(entry.start).format("YYYY-MM-DD"),
+      className: entry.className,
+    })),
+    eventOrder: "start", // order events by their start date/time
   });
+
+  console.log(calendar.title);
   calendar.render();
 </script>

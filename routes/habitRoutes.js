@@ -5,22 +5,45 @@ const habitListController = require("../controller/habitListController");
 const { ensureAuthenticated } = require("../config/auth");
 
 // Define the routes for handling habit-view related requests
-router.get("/", habitController.home);
+router.get("/", function (req, res) {
+  habitController.home(req, res);
+});
+// /sign in
 router.get("/sign-in", habitController.signIn);
-router.get("/HabitList", ensureAuthenticated, habitListController.habitList);
-router.get("/habit/:id/log", habitListController.habit_log_get);
-router.get("/sing-in-google", habitController.googleSignUp);
+router.get("/sing-in-google", function (req, res) {
+  habitController.googleSignUp(req, res);
+});
+//rendering the list
+router.get("/habitList", ensureAuthenticated, habitListController.habitList);
+
+// Route to show habit log page
+router.get("/habit/:id/log", ensureAuthenticated, function (req, res) {
+  habitListController.habitLog(req, res);
+});
+
 // Define the routes for handling habit-post related requests
-router.post("/create-user", habitController.createUser);
-router.post("/signIn-user", habitController.logIn);
-router.post("/habit/create", habitListController.newHabit);
-router.post("/habit/:habitId/log/create", habitListController.log_create);
-router.post(
-  "/habit/:habitId/log/:entryId/update",
-  habitListController.log_update
-);
+router.post("/create-user", function (req, res) {
+  habitController.createUser(req, res);
+});
+router.post("/signIn-user", function (req, res) {
+  habitController.logIn(req, res);
+});
+router.post("/habit/create", ensureAuthenticated, function (req, res) {
+  habitListController.newHabit(req, res);
+});
+// Route to handle adding log entries
+// Route to handle adding log entries
+router.post("/habit/:id/log", function (req, res) {
+  habitListController.addHabitLog(req, res);
+});
+//
+router.post("/habit/:habitId/log/:entryId/update", function (req, res) {
+  habitListController.log_update(req, res);
+});
 //delete
-router.get("/habit/:id/delete", habitListController.deleteHabit);
+router.get("/habit/:id/delete", function (req, res) {
+  habitListController.deleteHabit(req, res);
+});
 
 // Export the router for use in the app
 module.exports = router;
