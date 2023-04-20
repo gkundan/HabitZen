@@ -9,11 +9,12 @@ exports.habitList = async (req, res, next) => {
       return res.redirect("/sign-in");
     }
 
+    req.flash("success", "Welcome Home!");
     // Retrieve habits for the logged-in user
     const habits = await Habit.find({ userId: req.session.userId });
 
     return res.render("habitList", {
-      title: "My Habits",
+      title: "Your Habits",
       habits: habits,
       user: req.user,
     });
@@ -35,7 +36,7 @@ exports.newHabit = async (req, res) => {
     const habitData = { ...req.body, userId };
     const habit = new Habit(habitData);
     await habit.save();
-
+    req.flash("success", "New Habit Created!");
     res.redirect("back");
   } catch (error) {
     console.error(error);
@@ -49,9 +50,11 @@ exports.deleteHabit = async (req, res, next) => {
     const habit = await Habit.findByIdAndDelete(req.params.id);
 
     if (!habit) {
+      req.flash("error", "Habit not found!");
       return res.status(404).send("Habit not found");
     }
 
+    req.flash("error", "Habit Deleted!");
     res.redirect("back");
   } catch (error) {
     console.error(error);
@@ -65,6 +68,7 @@ exports.habitLog = async (req, res, next) => {
     const habit = await Habit.findById(req.params.id);
 
     if (!habit) {
+      req.flash("error", "Habit not found!");
       return res.status(404).send("Habit not found");
     }
 
@@ -93,6 +97,7 @@ exports.habitLog = async (req, res, next) => {
       log,
       moment,
       user: req.user,
+      messages: req.flash(),
     });
   } catch (error) {
     console.error(error);
@@ -105,7 +110,8 @@ exports.addHabitLog = async (req, res, next) => {
   try {
     const habit = await Habit.findById(req.params.id);
     if (!habit) {
-      return res.status(404).send("Habit not found");
+      req.flash("error", "Habit not found");
+      return res.redirect("back");
     }
 
     const { date, action } = req.body;
@@ -119,11 +125,14 @@ exports.addHabitLog = async (req, res, next) => {
       moment(entry.date).isSame(moment(date), "day")
     );
     if (existingEntry) {
-      return res.status(400).send("An entry already exists for this date");
+      req.flash("error", "An entry already exists for this date");
+      return res.redirect(`/habit/${habit._id}/log`);
     }
+    req.flash("Success", "An entry Added to Your Log!!");
 
     habit.log.push(logEntry);
     await habit.save();
+    req.flash("Success", "An entry Added to Your Log!!");
 
     res.redirect(`/habit/${habit._id}/log`);
   } catch (error) {

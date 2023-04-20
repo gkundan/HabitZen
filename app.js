@@ -19,7 +19,7 @@ app.use(bodyParser.json());
 app.use(express.static("./assets"));
 app.use(expressLayouts);
 app.use(cookieParser());
-
+app.use(flash());
 //session
 app.use(
   session({
@@ -37,9 +37,6 @@ passportLocal(passport);
 
 // Connect to MongoDB
 connectDB();
-
-// Set up flash middleware
-app.use(flash());
 
 // Set up view engine
 app.set("view engine", "ejs");

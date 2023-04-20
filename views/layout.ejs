@@ -29,5 +29,31 @@
     <main><%- body %></main>
     <%- include('footer'); -%>
     <script src="/js/main.js"></script>
+
+    <script>
+      $(document).ready(function () {
+        <% if (typeof messages !== 'undefined' && messages.error) { %>
+        new Noty({
+          type: 'error',
+          text: '<%= messages.error %>',
+          timeout: 3000, // display for 3 seconds
+          animation: {
+            open: 'animated fadeIn', // fade in animation
+            close: 'animated fadeOut', // fade out animation
+          },
+        }).show();
+        <% } else if (typeof messages !== 'undefined' && messages.success) { %>
+        new Noty({
+          type: 'success',
+          text: '<%= messages.success %>',
+          timeout: 3000, // display for 3 seconds
+          animation: {
+            open: 'animated fadeIn', // fade in animation
+            close: 'animated fadeOut', // fade out animation
+          },
+        }).show();
+        <% } %>
+      });
+    </script>
   </body>
 </html>

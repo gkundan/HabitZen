@@ -7,7 +7,10 @@ const bcrypt = require("bcrypt");
 exports.home = (req, res) => {
   res.render("Home", {
     title: "Welcome to Habit Zone",
-    message: "",
+    messages: {
+      error: req.flash("error"),
+      success: req.flash("success"),
+    },
   });
 };
 
@@ -16,14 +19,15 @@ exports.createUser = async (req, res) => {
   try {
     // check the password
     if (req.body.password !== req.body["confirm-password"]) {
-      console.log("Password Error!");
+      req.flash("error", "Passwords do not match.");
       return res.redirect("back");
     }
 
     // check if the email is already in the database
     const user = await User.findOne({ email: req.body.email });
     if (user) {
-      console.log("Email is already taken!");
+      req.flash("error", "Email is already taken.");
+
       return res.redirect("back");
     }
 
@@ -38,10 +42,11 @@ exports.createUser = async (req, res) => {
       name: req.body.name,
     });
 
-    console.log("User created successfully!");
+    req.flash("success", "User created successfully!");
     return res.redirect("/sign-in");
   } catch (err) {
     console.error(err);
+    req.flash("error", "Internal server error.");
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -50,10 +55,13 @@ exports.createUser = async (req, res) => {
 exports.signIn = (req, res) => {
   res.render("sign_in", {
     title: "Welcome to Habit Zone",
+    messages: {
+      error: req.flash("error"),
+      success: req.flash("success"),
+    },
   });
 };
 
-//user log in
 //user log in
 exports.logIn = function (req, res, next) {
   passport.authenticate("local", function (err, user, info) {
@@ -61,7 +69,7 @@ exports.logIn = function (req, res, next) {
       return next(err);
     }
     if (!user) {
-      console.log("user not found");
+      req.flash("error", info.message);
       return res.redirect("back");
     }
     req.logIn(user, function (err) {
