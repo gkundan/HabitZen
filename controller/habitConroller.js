@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 
 //home views
 exports.home = (req, res) => {
-  res.render("Home", {
+  res.render("home", {
     title: "Welcome to Habit Zone",
     messages: {
       error: req.flash("error"),
