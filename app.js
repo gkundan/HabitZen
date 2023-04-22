@@ -5,6 +5,7 @@ const flash = require("connect-flash");
 const connectDB = require("./config/db");
 const app = express();
 const port = process.env.PORT || 3000;
+const path = require("path");
 const habitRouts = require("./routes/habitRoutes");
 const expressLayouts = require("express-ejs-layouts");
 const cookieParser = require("cookie-parser");
@@ -39,6 +40,7 @@ passportLocal(passport);
 connectDB();
 
 // Set up view engine
+app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 // Set up routes
