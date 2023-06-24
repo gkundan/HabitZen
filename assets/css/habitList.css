@@ -61,6 +61,25 @@ td {
 th {
   background-color: #f2f2f2;
 }
+.btn{
+  background-color: #3865ef;
+  color: #fff;
+  font-size: 1vmax;
+  height: 3vmax;
+  width: 35%;
+  border: none;
+  border-radius: 15px;
+  font-weight: 600;
+}
+.LogOut_btn{
+
+  color: #d50f0f;
+  font-size: 1.5vmax;
+ 
+  font-weight: 600;
+  text-decoration: none;
+}
+
 
 a.delete-habit-link {
   color: red;

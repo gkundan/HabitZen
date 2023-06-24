@@ -1,47 +1,48 @@
-<div class="log_container">
-  <div class="entry-log">
-    <h2>Add Entry For <%=title %></h2>
-    <div class="entry-form">
-      <form method="POST" action="/habit/<%= habit._id %>/log">
-        <div>
-          <label for="entry-date">Date:</label>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="log_container">
+        <div class="entry-log">
+          <h2>Add Entry For <%=title %></h2>
+          <div class="entry-form">
+            <form method="POST" action="/habit/<%= habit._id %>/log">
+              <div class="form-group">
+                <label for="entry-date">Date:</label>
+                <input type="date" class="form-control" id="entry-date" name="date" required />
+              </div>
+              <div class="form-group">
+                <label for="entry-action">Action:</label>
+                <select class="form-control" id="entry-action" name="action" required>
+                  <option value="Done">Done</option>
+                  <option value="Not Done">Not Done</option>
+                  <option value="No Action">No Action</option>
+                </select>
+              </div>
+              <button type="submit" class="btn btn-primary">Add Entry</button>
+            </form>
+          </div>
         </div>
-        <div>
-          <input type="date" id="entry-date" name="date" required />
-        </div>
-        <div>
-          <label for="entry-action">Action:</label>
-        </div>
-        <div>
-          <select id="entry-action" name="action" required>
-            <option value="Done">Done</option>
-            <option value="Not Done">Not Done</option>
-            <option value="No Action">No Action</option>
-          </select>
-        </div>
-        <button type="submit">Add Entry</button>
-      </form>
+      </div>
     </div>
-  </div>
-  <div class="update-log">
-    <h2>Habit Log Of <%= user.name %></h2>
-    <% if (log && log.length) { %>
-    <div class="calendar-container">
-      <div id="calendar"></div>
+    <div class="col-lg-6">
+      <div class="log_container">
+        <div class="update-log">
+          <h2>Habit Log Of <%= user.name %></h2>
+          <% if (log && log.length) { %>
+          <div class="calendar-container">
+            <div id="calendar"></div>
+          </div>
+          <% } else { %>
+          <p>No log entries found for this habit.</p>
+          <% } %>
+        </div>
+      </div>
     </div>
-    <% } else { %>
-    <p>No log entries found for this habit.</p>
-    <% } %>
   </div>
 </div>
 
 <!-- Load FullCalendar library -->
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.5/index.global.min.js"
-  integrity="sha512-msf87GoBgo6wsVj7CMhInBkfANiREgSpEi70QxdhSy76PDU2b3I5PrapLDmRHVV/ycCoQATfgGeO/JbGgS7dUA=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/6.1.5/index.global.min.js" integrity="sha512-msf87GoBgo6wsVj7CMhInBkfANiREgSpEi70QxdhSy76PDU2b3I5PrapLDmRHVV/ycCoQATfgGeO/JbGgS7dUA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script>
   // Get habit log entries

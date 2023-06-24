@@ -3,7 +3,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
 
-//home views
+// Home view
 exports.home = (req, res) => {
   res.render("home", {
     title: "Welcome to Habit Zone",
@@ -14,44 +14,7 @@ exports.home = (req, res) => {
   });
 };
 
-//user sign up
-exports.createUser = async (req, res) => {
-  try {
-    // check the password
-    if (req.body.password !== req.body["confirm-password"]) {
-      req.flash("error", "Passwords do not match.");
-      return res.redirect("back");
-    }
-
-    // check if the email is already in the database
-    const user = await User.findOne({ email: req.body.email });
-    if (user) {
-      req.flash("error", "Email is already taken.");
-
-      return res.redirect("back");
-    }
-
-    // hash the password before saving the user
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(req.body.password, salt);
-
-    // create new user with hashed password
-    const newUser = await User.create({
-      email: req.body.email,
-      password: hashedPassword,
-      name: req.body.name,
-    });
-
-    req.flash("success", "User created successfully!");
-    return res.redirect("/sign-in");
-  } catch (err) {
-    console.error(err);
-    req.flash("error", "Internal server error.");
-    return res.status(500).json({ message: "Internal server error" });
-  }
-};
-
-//sing IN Page
+// Sign-in Page
 exports.signIn = (req, res) => {
   res.render("sign_in", {
     title: "Welcome to Habit Zone",
@@ -60,6 +23,21 @@ exports.signIn = (req, res) => {
       success: req.flash("success"),
     },
   });
+};
+
+
+//user sign up
+exports.createUser = async (req, res) => {
+  try {
+    // ...
+
+    req.flash("success", "User created successfully!");
+    return res.redirect("/sign-in");
+  } catch (err) {
+    console.error(err);
+    req.flash("error", "Internal server error.");
+    return res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 //user log in

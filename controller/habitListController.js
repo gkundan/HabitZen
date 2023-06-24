@@ -9,7 +9,6 @@ exports.habitList = async (req, res, next) => {
       return res.redirect("/sign-in");
     }
 
-    req.flash("success", "Welcome Home!");
     // Retrieve habits for the logged-in user
     const habits = await Habit.find({ userId: req.session.userId });
 
@@ -17,12 +16,17 @@ exports.habitList = async (req, res, next) => {
       title: "Your Habits",
       habits: habits,
       user: req.user,
+      messages: {
+        error: req.flash("error"),
+        success: req.flash("success"),
+      },
     });
   } catch (error) {
     console.error(error);
     next(error);
   }
 };
+
 
 // Controller function to handle creating a new habit
 exports.newHabit = async (req, res) => {

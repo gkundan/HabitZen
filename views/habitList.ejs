@@ -1,92 +1,76 @@
-<div class="List-main">
-  <div class="main-container">
-    <div class="List-contaier">
-      <h1><%= title %> <strong> <%=user.name%></strong></h1>
-      <div class="form-div">
-        <form method="POST" action="/habit/create">
-          <div>
-            <label for="category">Category:</label>
-          </div>
-          <div>
-            <select id="category" name="category">
-              <option value="gym">Gym</option>
-              <option value="exercise">Exercise</option>
-              <option value="play">Play</option>
-              <option value="swimming">Swimming</option>
-              <option value="study">Study</option>
-              <option value="walking">Walking</option>
-              <option value="custom">Custom</option>
-            </select>
-          </div>
-
-          <div id="custom-category" style="display: none">
-            <div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-10 ">
+      <h1 class="mt-4"><%= title %> <strong><%= user.name %></strong></h1>
+      <div class="card mt-4">
+        <div class="card-body">
+          <form method="POST" action="/habit/create">
+            <div class="form-group">
+              <label for="category">Category:</label>
+              <select class="form-control" id="category" name="category">
+                <option value="gym">Gym</option>
+                <option value="exercise">Exercise</option>
+                <option value="play">Play</option>
+                <option value="swimming">Swimming</option>
+                <option value="study">Study</option>
+                <option value="walking">Walking</option>
+                <option value="custom">Custom</option>
+              </select>
+            </div>
+            <div class="form-group" id="custom-category" style="display: none">
               <label for="custom-category-name">Custom Category Name:</label>
+              <input type="text" class="form-control" id="custom-category-name" name="custom-category-name">
             </div>
-            <div>
-              <input
-                type="text"
-                id="custom-category-name"
-                name="custom-category-name"
-              />
+            <div class="form-group">
+              <label for="name">Habit Description:</label>
+              <input type="text" class="form-control" id="name" name="name">
             </div>
-          </div>
-          <div>
-            <label for="name">Habit Description:</label>
-          </div>
-          <div><input type="text" id="name" name="name" /></div>
-          <div class="submit-btn">
-            <button class="submit-form" type="submit">Add Habit</button>
-          </div>
-        </form>
+            <div class="text-center">
+              <button class="btn" type="submit">Add Habit</button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-    <div class="Log-container">
-      <a href="/logout">Log out</a>
-      <div>
-        <% if (habits.length > 0) { %>
-        <table>
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Name</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% habits.forEach((habit) => { %>
-            <tr>
-              <td><%= habit.category %></td>
-              <td>
-                <a href="/habit/<%= habit._id %>/log"><%= habit.name %></a>
-              </td>
-              <td>
-                <a
-                  href="/habit/<%= habit._id %>/delete"
-                  class="delete-habit-link"
-                  >Delete</a
-                >
-                <form
-                  class="delete-habit-form"
-                  method="POST"
-                  action="/habit/<%= habit._id %>/delete"
-                >
-                  <input type="hidden" name="_method" value="DELETE" />
-                </form>
-              </td>
-            </tr>
-            <% }) %>
-          </tbody>
-        </table>
-        <% } else { %>
-        <p>You have no habits yet.</p>
-        <% } %>
+      <div class="card mt-4">
+        <div class="card-body">
+          <a href="/logout" class="LogOut_btn">Log out</a>
+          <div class="clearfix"></div>
+          <% if (habits.length > 0) { %>
+          <table class="table mt-4">
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% habits.forEach((habit) => { %>
+              <tr>
+                <td><%= habit.category %></td>
+                <td>
+                  <a href="/habit/<%= habit._id %>/log"><%= habit.name %></a>
+                </td>
+                <td>
+                  <a href="/habit/<%= habit._id %>/delete" class="del_btn ">Delete</a>
+                  <form class="delete-habit-form" method="POST" action="/habit/<%= habit._id %>/delete">
+                    <input type="hidden" name="_method" value="DELETE">
+                  </form>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } else { %>
+          <p class="mt-4">You have no habits yet.</p>
+          <% } %>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- //custom input  -->
+<!-- Custom input -->
 <script>
   const customCategory = document.getElementById("custom-category");
   const categoryDropdown = document.getElementById("category");
@@ -99,5 +83,3 @@
     }
   });
 </script>
-<!-- //delete script  -->
-<script src="/assets/js/main.js"></script>
